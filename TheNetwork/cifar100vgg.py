@@ -14,7 +14,7 @@ from keras import optimizers
 import numpy as np
 from keras import regularizers
 
-from TheNetwork.data_utils import DataUtils
+from TheNetwork.image_utils import ImageUtils
 
 
 class cifar100vgg:
@@ -213,7 +213,7 @@ if __name__ == '__main__':
     # y_train = keras.utils.to_categorical(y_train, 100)
     # y_test = keras.utils.to_categorical(y_test, 100)
 
-    utils = DataUtils()
+    utils = ImageUtils()
     json_filename = 'C:/Users/Rey/Projects/TheImageWhisperer/Data/not_stegged/image0.json'
     a = utils.json_filename_to_array(json_filename)
 

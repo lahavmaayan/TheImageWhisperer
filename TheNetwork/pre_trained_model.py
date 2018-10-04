@@ -1,16 +1,14 @@
 
-
-from __future__ import print_function
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Activation, Flatten
 from keras.layers import Conv2D, MaxPooling2D, BatchNormalization
 from keras import regularizers
 
 
-class PreTrainedModelArchitecture(object):
+class PreTrainedModel(object):
     """
     This class holds the Keras architecture of a neural network inspired by VGG.
-    This network takes as input a 32 X 32 X 3 array and categorize it to one of the 100 categories in CIFAR100.
+    This network takes as input a 32 X 32 X 3 array and classifies to the 100 categories in CIFAR100.
 
     This architecture was copied from https://github.com/geifmany/cifar-vgg
     """
@@ -20,12 +18,16 @@ class PreTrainedModelArchitecture(object):
     MODEL_FILENAME = 'cifar100vgg.h5'
 
     def __init__(self):
-        self.num_classes = PreTrainedModelArchitecture.NUM_CLASSES
-        self.weight_decay = PreTrainedModelArchitecture.WEIGHT_DECAY
-        self.x_shape = PreTrainedModelArchitecture.X_SHAPE
+        self.num_classes = PreTrainedModel.NUM_CLASSES
+        self.weight_decay = PreTrainedModel.WEIGHT_DECAY
+        self.x_shape = PreTrainedModel.X_SHAPE
 
-        self.model = self.build_model()
-        self.model.load_weights(PreTrainedModelArchitecture.MODEL_FILENAME)
+        self.model = None
+
+    def build_pre_trained_model(self):
+        """Build architecture and load weights of pre-trained network."""
+        self.build_model()
+        self.load_weights()
 
     def build_model(self):
         """Build the network of vgg for 10 classes with massive dropout and weight decay as described in the paper."""
@@ -116,4 +118,8 @@ class PreTrainedModelArchitecture(object):
         model.add(Dense(self.num_classes))
         model.add(Activation('softmax'))
 
-        return model
+        self.model = model
+
+    def load_weights(self):
+        """Load weights for pre-trained model."""
+        self.model.load_weights(PreTrainedModel.MODEL_FILENAME)
