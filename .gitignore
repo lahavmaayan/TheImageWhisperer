@@ -1,3 +1,8 @@
 Data/
 TheNetwork/cifar100vgg.h5
 .idea
+image_whisperer_frontend/node_modules/
+image_whisperer_frontend/log.log
+image_whisperer_frontend/uploads/
+images/
+*.pyc
