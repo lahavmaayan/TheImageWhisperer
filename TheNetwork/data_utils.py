@@ -1,6 +1,7 @@
 import json
 import numpy as np
 
+
 class DataUtils(object):
     IMAGES_DIR = 'C:/Users/Rey/Projects/TheImageWhisperer/Data'
 
