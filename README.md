@@ -22,7 +22,7 @@ In order to create your data sets:
 To run the frontend and backend (of the web site) you need:
 1. angular6.
 2. nodejs
-3. run npm install
+3. run `npm install`
 4. to run the node server, run - `nodemon server`
 5. to run the angular (front-end), run - `ng serve`
 6. visit `http://localhost:4200/` and start using The Image Whisperer! :)

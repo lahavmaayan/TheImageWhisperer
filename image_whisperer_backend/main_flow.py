@@ -31,9 +31,9 @@ RESULT_TO_TEXT_DICT = {
 
 def main_flow(image_file_name):
     logging.info("main flow, and this is the image file name - {!s}".format(image_file_name))
-    path_to_image_file = _get_path_to_image_as_json(image_file_name)
-    result = _check_if_image_was_encrypted(path_to_image_file)
-    bmp_path = _transform_array_to_bmp_file(path_to_image_file)
+    path_to_json_image_file = _get_path_to_image_as_json(image_file_name)
+    result = _check_if_image_was_encrypted(path_to_json_image_file)
+    bmp_path = _transform_array_to_bmp_file(path_to_json_image_file)
     _present_result(result, bmp_path)
 
 
@@ -49,13 +49,13 @@ def _get_path_to_image_as_json(image_file_name):
     return json_path
 
 
-def _check_if_image_was_encrypted(image_represented_as_lists):
+def _check_if_image_was_encrypted(path_to_json_image_file):
     logging.info("_check_if_image_was_encrypted, and this is the image_represented_as_lists - {!s}".format(
-        image_represented_as_lists))
-    return _asyas_code(image_represented_as_lists)
+        path_to_json_image_file))
+    return _asyas_code(path_to_json_image_file)
 
 
-def _asyas_code(image):
+def _asyas_code(path_to_json_image_file):
     # @TODO - should call the relevant code
     return 1
 
@@ -96,6 +96,6 @@ def _present_result(result, image_path):
 
 if __name__ == "__main__":
     logging.info("we were called!")
-    path = sys.argv[1]
-    main_flow(path)
+    path_to_uploaded_image = sys.argv[1]
+    main_flow(path_to_uploaded_image)
     logging.info("done!")
