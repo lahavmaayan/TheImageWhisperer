@@ -25,14 +25,6 @@ class WhisperDetector(object):
         veggie_model = VeGGieModel()
         self.model = veggie_model.build_veggie_model()
 
-    # def json_file_to_array(self, filename):
-    #     # filename doesn't end with .json
-    #     with open(filename) as f:
-    #         a = json.loads(f.read())
-    #         a = np.array([[[pix for pix in row] for row in color] for color in a])
-    #         a = a.transpose(1, 2, 0)
-    #         return a
-
     def json_filename_to_array(self, json_filename):
        a = json.load(open(json_filename))
        a = np.array([[[pix for pix in row] for row in color] for color in a])
@@ -44,17 +36,24 @@ class WhisperDetector(object):
         for i, filename in enumerate(os.listdir(folder_path)):
             arr = self.json_filename_to_array(folder_path + "/" + filename)
             array_list.append(arr)
+            if i > 150:
+                break
         res = np.asarray(array_list)
         return res
 
-    def load_data(self):
-        num_classes = 1
+    def unison_shuffled_copies(self, a, b):
+        assert len(a) == len(b)
+        p = np.random.permutation(len(a))
+        return a[p], b[p]
 
-        # The data, shuffled and split between train and test sets:
+    def load_data(self):
+        """
+        Loads the data, split between train and test sets and shuffles it
+        """
         train_path_stegged = r"C:\Users\Asya\Code\dataHack\data\train\stegged"
         train_path_not_stegged = r"C:\Users\Asya\Code\dataHack\data\train\not_stegged"
-        test_path_stegged = r"C:\Users\Asya\Code\dataHack\data\test\stegged"
-        test_path_not_stegged = r"C:\Users\Asya\Code\dataHack\data\test\not_stegged"
+        test_path_stegged = r"C:\Users\Asya\Code\dataHack\data\validate\stegged"
+        test_path_not_stegged = r"C:\Users\Asya\Code\dataHack\data\validate\not_stegged"
 
         x_train_stegged = self.folder_to_array(train_path_stegged)
         x_train_not_stegged = self.folder_to_array(train_path_not_stegged)
@@ -71,9 +70,9 @@ class WhisperDetector(object):
         x_test = x_test.astype('float32')
         x_train, x_test = self.normalize(x_train, x_test)
 
-        # y_train = keras.utils.to_categorical(y_train, num_classes)
-        #
-        # y_test = keras.utils.to_categorical(y_test, num_classes)
+        x_train, y_train = self.unison_shuffled_copies(x_train, y_train)
+        x_test, y_test = self.unison_shuffled_copies(x_test, y_test)
+
         return (x_train, y_train), (x_test, y_test)
 
     def normalize(self, X_train, X_test):
@@ -110,52 +109,10 @@ class WhisperDetector(object):
 
         reduce_lr = keras.callbacks.LearningRateScheduler(lr_scheduler)
 
-        # train_datagen = ImageDataGenerator(preprocessing_function=self.json_file_to_array)
-        # train_generator = train_datagen.flow_from_directory(
-        #     directory=os.path.join(self.data_path, "train"),
-        #     target_size=(32, 32),
-        #     color_mode="rgb",
-        #     batch_size=32,
-        #     class_mode="categorical",
-        #     shuffle=True,
-        #     seed=42
-        # )
-        #
-        # validate_datagen = ImageDataGenerator(preprocessing_function=self.json_file_to_array)
-        # validate_generator = validate_datagen.flow_from_directory(
-        #     directory=os.path.join(self.data_path, "validate"),
-        #     target_size=(32, 32),
-        #     color_mode="rgb",
-        #     batch_size=32,
-        #     class_mode="categorical",
-        #     shuffle=True,
-        #     seed=42
-        # )
-        #
-        # test_datagen = ImageDataGenerator(preprocessing_function=self.json_file_to_array)
-        # test_generator = test_datagen.flow_from_directory(
-        #     directory=os.path.join(self.data_path, "test"),
-        #     target_size=(32, 32),
-        #     color_mode="rgb",
-        #     batch_size=1,
-        #     class_mode=None,
-        #     shuffle=False,
-        #     seed=42
-        # )
-
         #data augmentation - only flip as we don't want to harm the stegged data
         datagen = ImageDataGenerator(
-#            featurewise_center=False,  # set input mean to 0 over the dataset
-#            samplewise_center=False,  # set each sample mean to 0
-#            featurewise_std_normalization=False,  # divide inputs by std of the dataset
-#            samplewise_std_normalization=False,  # divide each input by its std
-#            zca_whitening=False,  # apply ZCA whitening
-#            rotation_range=15,  # randomly rotate images in the range (degrees, 0 to 180)
-#            width_shift_range=0.1,  # randomly shift images horizontally (fraction of total width)
-#            height_shift_range=0.1,  # randomly shift images vertically (fraction of total height)
             horizontal_flip=True,  # randomly flip images
             vertical_flip=True)  # randomly flip images
-#        (std, mean, and principal components if ZCA whitening is applied).
         datagen.fit(x_train)
 
         # optimization details
