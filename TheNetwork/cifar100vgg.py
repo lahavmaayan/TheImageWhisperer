@@ -1,5 +1,6 @@
 """
 This file was copied from https://github.com/geifmany/cifar-vgg
+And modified slightly to fit our needs
 """
 
 from __future__ import print_function
@@ -11,12 +12,13 @@ from keras.layers import Dense, Dropout, Activation, Flatten
 from keras.layers import Conv2D, MaxPooling2D, BatchNormalization
 from keras import optimizers
 import numpy as np
-from keras.layers.core import Lambda
-from keras import backend as K
 from keras import regularizers
 
+from TheNetwork.data_utils import DataUtils
+
+
 class cifar100vgg:
-    def __init__(self,train=True):
+    def __init__(self,train=False):
         self.num_classes = 100
         self.weight_decay = 0.0005
         self.x_shape = [32,32,3]
@@ -196,24 +198,29 @@ class cifar100vgg:
         # training process in a for loop with learning rate drop every 25 epoches.
 
         historytemp = model.fit_generator(datagen.flow(x_train, y_train,
-                                         batch_size=batch_size),
-                            steps_per_epoch=x_train.shape[0] // batch_size,
-                            epochs=maxepoches,
-                            validation_data=(x_test, y_test),callbacks=[reduce_lr],verbose=2)
+                                                       batch_size=batch_size),
+                                          steps_per_epoch=x_train.shape[0] // batch_size,
+                                          epochs=maxepoches,
+                                          validation_data=(x_test, y_test),callbacks=[reduce_lr],verbose=2)
         model.save_weights('cifar100vgg.h5')
         return model
 
 if __name__ == '__main__':
-    (x_train, y_train), (x_test, y_test) = cifar100.load_data()
-    x_train = x_train.astype('float32')
-    x_test = x_test.astype('float32')
+    # (x_train, y_train), (x_test, y_test) = cifar100.load_data()
+    # x_train = x_train.astype('float32')
+    # x_test = x_test.astype('float32')
+    #
+    # y_train = keras.utils.to_categorical(y_train, 100)
+    # y_test = keras.utils.to_categorical(y_test, 100)
 
-    y_train = keras.utils.to_categorical(y_train, 100)
-    y_test = keras.utils.to_categorical(y_test, 100)
+    utils = DataUtils()
+    json_filename = 'C:/Users/Rey/Projects/TheImageWhisperer/Data/not_stegged/image0.json'
+    a = utils.json_filename_to_array(json_filename)
 
     model = cifar100vgg()
+    print(model.predict(np.array([a])))
 
-    predicted_x = model.predict(x_test)
-    residuals = (np.argmax(predicted_x,1)!=np.argmax(y_test,1))
-    loss = sum(residuals)/len(residuals)
-    print("the validation 0/1 loss is: ",loss)
+    # predicted_x = model.predict(x_test)
+    # residuals = (np.argmax(predicted_x,1)!=np.argmax(y_test,1))
+    # loss = sum(residuals)/len(residuals)
+    # print("the validation_dataon 0/1 loss is: ",loss)
