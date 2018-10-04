@@ -16,9 +16,8 @@ from TheNetwork.veggie import VeGGieModel
 
 class WhisperDetector(object):
     """"""
-    def __init__(self, path):
+    def __init__(self):
         self.model = None
-        self.data_path = path
 
     def build(self):
         """Build the VeGGie architecture."""
@@ -33,11 +32,9 @@ class WhisperDetector(object):
 
     def folder_to_array(self, folder_path):
         array_list = []
-        for i, filename in enumerate(os.listdir(folder_path)):
+        for filename in os.listdir(folder_path):
             arr = self.json_filename_to_array(folder_path + "/" + filename)
             array_list.append(arr)
-            if i > 150:
-                break
         res = np.asarray(array_list)
         return res
 
@@ -97,7 +94,7 @@ class WhisperDetector(object):
         """
         # training parameters
         batch_size = 128
-        maxepoches = 250
+        maxepoches = 2
         learning_rate = 0.1
         lr_decay = 1e-6
         lr_drop = 20
@@ -127,17 +124,13 @@ class WhisperDetector(object):
                                                steps_per_epoch=x_train.shape[0] // batch_size,
                                                epochs=maxepoches,
                                                validation_data=(x_test, y_test), callbacks=[reduce_lr], verbose=2)
-        self.model.fit_generator(
-            train_generator,
-            steps_per_epoch=2000 // batch_size,
-            epochs=50,
-            validation_data=validate_generator,
-            validation_steps=800 // batch_size)
+
         self.model.save_weights('veggie.h5')
 
     def predict(self, json_file):
         arr = self.json_filename_to_array(json_file)
-        self.model.predict(arr)
+        arr = arr[np.newaxis,:]
+        return self.model.predict(arr)
 
     def save_trained_model(self, h5_filename='veggie.h5'):
         self.model.save_weights(h5_filename)
