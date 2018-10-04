@@ -4,6 +4,7 @@ from optparse import OptionParser
 from TheNetwork.whisper_detector import WhisperDetector
 
 
+
 def Main():
     parser = OptionParser()
     parser.add_option("-m", "--max_num_pics_per_category",
@@ -17,7 +18,7 @@ def Main():
                       help="When, for fail-safe reasons, training in separate batches, load weights of previous train.")
     options, _ = parser.parse_args()
 
-    m = int(options.max_num_pics_per_category)
+    m = int(options.max_num_pics_per_category) if options.max_num_pics_per_category is not None else None
     e = int(options.epochs)
     b = int(options.batch_size)
     whisper_detector = WhisperDetector(m, e, b)

@@ -37,7 +37,7 @@ class WhisperDetector(object):
     def folder_to_array(self, folder_path):
         """Load all images from a folder and put in a numpy array of one batch."""
         array_list = []
-        for filename in os.listdir(folder_path):
+        for i, filename in enumerate(os.listdir(folder_path)):
             arr = self.json_filename_to_array(folder_path + "/" + filename)
             array_list.append(arr)
             if i > self.max_num_pics_per_category:
