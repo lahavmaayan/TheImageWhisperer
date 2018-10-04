@@ -1,0 +1,131 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>TheNetwork.veggie &#8212; TheImageWhisperer  documentation</title>
+    <link rel="stylesheet" href="../../_static/graphite.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">TheImageWhisperer  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for TheNetwork.veggie</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">TheNetwork.pre_trained_model</span> <span class="k">import</span> <span class="n">PreTrainedModel</span>
+
+<span class="kn">from</span> <span class="nn">keras.layers</span> <span class="k">import</span> <span class="n">Dense</span>
+<span class="kn">from</span> <span class="nn">keras.models</span> <span class="k">import</span> <span class="n">Model</span>
+
+
+<div class="viewcode-block" id="VeGGieModel"><a class="viewcode-back" href="../../veggie.html#TheNetwork.veggie.VeGGieModel">[docs]</a><span class="k">class</span> <span class="nc">VeGGieModel</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The VeGGie model is a variation on the familiar VGG architecture.</span>
+<span class="sd">    It is built by popping the last two layers of https://github.com/geifmany/cifar-vgg</span>
+<span class="sd">        and adding two dense layers (10+relu =&gt; 1+sigmoid)</span>
+<span class="sd">        to make this architecture suitable for binary classification tasks.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">MIDDLE_LAYER_SIZE</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">WEIGHT_DECAY</span> <span class="o">=</span> <span class="mf">0.0005</span>
+    <span class="n">X_SHAPE</span> <span class="o">=</span> <span class="p">[</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">middle_layer_size</span> <span class="o">=</span> <span class="n">VeGGieModel</span><span class="o">.</span><span class="n">MIDDLE_LAYER_SIZE</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weight_decay</span> <span class="o">=</span> <span class="n">VeGGieModel</span><span class="o">.</span><span class="n">WEIGHT_DECAY</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_shape</span> <span class="o">=</span> <span class="n">VeGGieModel</span><span class="o">.</span><span class="n">X_SHAPE</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="VeGGieModel.build_veggie_model"><a class="viewcode-back" href="../../veggie.html#TheNetwork.veggie.VeGGieModel.build_veggie_model">[docs]</a>    <span class="k">def</span> <span class="nf">build_veggie_model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Build pre-trained network and use transfer learning architecture to build VeGGie.&quot;&quot;&quot;</span>
+        <span class="n">pre_trained_model</span> <span class="o">=</span> <span class="n">PreTrainedModel</span><span class="p">()</span>
+        <span class="n">pre_trained_model</span><span class="o">.</span><span class="n">build_pre_trained_model</span><span class="p">()</span>
+
+        <span class="n">pre_trained_model</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+        <span class="n">pre_trained_model</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+
+        <span class="n">new_dense_layer</span> <span class="o">=</span> <span class="n">Dense</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;new_dense_layer&#39;</span><span class="p">)</span>
+        <span class="n">new_binary_classification_layer</span> <span class="o">=</span> <span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;sigmoid&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;new_binary_classification_layer&#39;</span><span class="p">)</span>
+
+        <span class="n">inp</span> <span class="o">=</span> <span class="n">pre_trained_model</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">input</span>
+        <span class="n">middle</span> <span class="o">=</span> <span class="n">new_dense_layer</span><span class="p">(</span><span class="n">pre_trained_model</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">output</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">new_binary_classification_layer</span><span class="p">(</span><span class="n">middle</span><span class="p">)</span>
+
+        <span class="n">veggie</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">inp</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">veggie</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/whisper.png" alt="Logo"/>
+            </a></p>
+<h3><a href="../../index.html">TheImageWhisperer</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../pre_trained_model.html">The Pre Trained Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../veggie.html">The VeGGie Architecture</a></li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">TheImageWhisperer  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, llmaayanll, belle05, asyaf, batelm1, DalyaG.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.
+    </div>
+  </body>
+</html>

@@ -11,6 +11,7 @@ class ImageUtils(object):
         self.images_dir = ImageUtils.IMAGES_DIR
 
     def json_filename_to_array(self, json_filename):
+        """Load .json filename into a numpy array that fits as input to VeGGie."""
         a = json.load(open(json_filename))
         a = np.array([[[pix for pix in row] for row in color] for color in a])
         a = a.transpose(1, 2, 0)

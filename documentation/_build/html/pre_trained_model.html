@@ -23,6 +23,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="The VeGGie Architecture" href="veggie.html" />
     <link rel="prev" title="Welcome to TheImageWhisperer’s documentation!" href="index.html" /> 
   </head>
   <body>
@@ -32,6 +33,9 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="veggie.html" title="The VeGGie Architecture"
+             accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="index.html" title="Welcome to TheImageWhisperer’s documentation!"
              accesskey="P">previous</a> |</li>
@@ -49,6 +53,32 @@
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
+<dl class="class">
+<dt id="TheNetwork.pre_trained_model.PreTrainedModel">
+<em class="property">class </em><code class="descclassname">TheNetwork.pre_trained_model.</code><code class="descname">PreTrainedModel</code><a class="reference internal" href="_modules/TheNetwork/pre_trained_model.html#PreTrainedModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheNetwork.pre_trained_model.PreTrainedModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class holds the Keras architecture of a neural network inspired by VGG.
+This network takes as input a 32 X 32 X 3 array and classifies to the 100 categories in CIFAR100.</p>
+<p>This architecture was copied from <a class="reference external" href="https://github.com/geifmany/cifar-vgg">https://github.com/geifmany/cifar-vgg</a></p>
+<dl class="method">
+<dt id="TheNetwork.pre_trained_model.PreTrainedModel.build_pre_trained_model">
+<code class="descname">build_pre_trained_model</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/TheNetwork/pre_trained_model.html#PreTrainedModel.build_pre_trained_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheNetwork.pre_trained_model.PreTrainedModel.build_pre_trained_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build architecture and load weights of pre-trained network.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="TheNetwork.pre_trained_model.PreTrainedModel.build_model">
+<code class="descname">build_model</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/TheNetwork/pre_trained_model.html#PreTrainedModel.build_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheNetwork.pre_trained_model.PreTrainedModel.build_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build the network of vgg for 10 classes with massive dropout and weight decay as described in the paper.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="TheNetwork.pre_trained_model.PreTrainedModel.load_weights">
+<code class="descname">load_weights</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/TheNetwork/pre_trained_model.html#PreTrainedModel.load_weights"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TheNetwork.pre_trained_model.PreTrainedModel.load_weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load weights for pre-trained model.</p>
+</dd></dl>
+
+</dd></dl>
+
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
@@ -67,6 +97,7 @@
 <h3><a href="index.html">TheImageWhisperer</a></h3>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">The Pre Trained Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="veggie.html">The VeGGie Architecture</a></li>
 </ul>
 
 <div id="searchbox" style="display: none" role="search">
@@ -90,6 +121,9 @@
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
+          <a href="veggie.html" title="The VeGGie Architecture"
+             >next</a> |</li>
+        <li class="right" >
           <a href="index.html" title="Welcome to TheImageWhisperer’s documentation!"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">TheImageWhisperer  documentation</a> &#187;</li> 
@@ -97,7 +131,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, llmaayanll, belle05, asyaf, batelm1, DalyaG.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.
     </div>
   </body>
 </html>

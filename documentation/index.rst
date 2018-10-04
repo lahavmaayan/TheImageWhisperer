@@ -4,7 +4,7 @@
 
 
 Welcome to TheImageWhisperer's documentation!
-=========================================================
+=============================================
 |
 
 TheImageWhisperer is a `steganography <https://en.wikipedia.org/wiki/Steganography>`_ detection app.
@@ -51,6 +51,7 @@ Dalya Gartzman `GitHub <https://github.com/DalyaG>`_ `LinkedIn <https://www.link
    :name: mastertoc
 
    pre_trained_model
+   veggie
 
 |
 

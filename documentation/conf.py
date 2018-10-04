@@ -16,7 +16,7 @@ Go to https://dalyag.github.io/Sphinx185/index.html
 
 import os
 import sys
-sys.path.append(os.path.abspath('/Users/dalya/Documents/TheImageWhisperer'))
+sys.path.append(os.path.abspath('C:/Users/Rey/Projects/TheImageWhisperer'))
 
 
 # -- Some general info  about the project -----------------------------------------------------------------------------
