@@ -39,3 +39,4 @@ class VeGGieModel(object):
 
         veggie = Model(inp, out)
         self.model = veggie
+        return self.model

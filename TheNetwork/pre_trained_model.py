@@ -122,4 +122,4 @@ class PreTrainedModel(object):
 
     def load_weights(self):
         """Load weights for pre-trained model."""
-        self.model.load_weights(PreTrainedModel.MODEL_FILENAME)
+        self.model.load_weights("./%s" % PreTrainedModel.MODEL_FILENAME)
