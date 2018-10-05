@@ -12,6 +12,9 @@ import cv2
 import numpy as np
 import sys
 import logging
+
+from TheNetwork.whisper_detector import WhisperDetector
+
 logging.basicConfig(filename='log.log', level=logging.INFO)
 
 
@@ -41,10 +44,10 @@ def _get_path_to_image_as_json(image_file_name):
     logging.info("_get_path_to_image_as_json, and this is the image file name - {!s}".format(image_file_name))
     dir_of_current_file = os.path.dirname(os.path.abspath(__file__))
     chosen_image_path = os.path.join(dir_of_current_file, "..", "image_whisperer_frontend", "uploads", image_file_name)
-    image_represented_as_lists = _cifar_image_to_array(chosen_image_path)
+    json_pic = _cifar_image_to_array(chosen_image_path)
     json_path = os.path.join(dir_of_current_file, "..", "images", image_file_name.split(".")[0] + ".json")
     with open(json_path, "w") as f:
-        json.dump(image_represented_as_lists.tolist(), f)
+        json.dump(json_pic, f)
     logging.info("this is the json path in _get_path_to_image_as_json - {!s}".format(json_path))
     return json_path
 
@@ -56,14 +59,21 @@ def _check_if_image_was_encrypted(path_to_json_image_file):
 
 
 def _asyas_code(path_to_json_image_file):
-    # @TODO - should call the relevant code
-    return 1
+    whisper_detector = WhisperDetector()
+    whisper_detector.build()
+    whisper_detector.load_weights(os.path.join("..", "TheNetwork" , "veggie.h5"))
+    a = _json_filename_to_array(path_to_json_image_file)
+    res = np.round(whisper_detector.model.predict(np.array([a]))[0])
+
+    # pred = whisper_detector.predict(path_to_json_image_file)
+    # res = round(pred[0])
+    return res
 
 
 def _json_filename_to_array(json_filename):
     a = json.load(open(json_filename))
     a = np.array([[[pix for pix in row] for row in color] for color in a])
-    a = a.transpose(1, 2, 0)
+    # a = a.transpose(1, 2, 0)
     return a
 
 
@@ -71,9 +81,12 @@ def _cifar_image_to_array(path):
     logging.info("run this function - _cifar_image_to_array, and this is the path - {!s}".format(path))
     srcBGR = cv2.imread(path)
     mx_ex_int_array = cv2.cvtColor(srcBGR, cv2.COLOR_BGR2RGB)
+
+    json_pic = [[[int(c) for c in column] for column in row] for row in mx_ex_int_array]
+
     # array = dest.transpose(2, 0, 1)
     # mx_ex_int_array = mx.nd.array(array)
-    return mx_ex_int_array
+    return json_pic
 
 
 # def _transform_array_to_bmp_file(array_path):
@@ -91,7 +104,7 @@ def _cifar_image_to_array(path):
 def _present_result(result):
     # logging.info("_present result, this is the image_path - {!s}".format(image_path))
     # the STDOUT is reported to the front-end.
-    print result
+    print(result)
 
 
 if __name__ == "__main__":

@@ -145,7 +145,7 @@ class WhisperDetector(object):
 
     def predict(self, json_file):
         arr = self.json_filename_to_array(json_file)
-        arr = arr[np.newaxis,:]
+        arr = np.array(arr)
         return self.model.predict(arr)
 
     def save_trained_model(self, h5_filename='veggie.h5'):

@@ -3,6 +3,7 @@ from keras.models import Sequential
 from keras.layers import Dense, Dropout, Activation, Flatten
 from keras.layers import Conv2D, MaxPooling2D, BatchNormalization
 from keras import regularizers
+import os
 
 
 class PreTrainedModel(object):
@@ -122,4 +123,6 @@ class PreTrainedModel(object):
 
     def load_weights(self):
         """Load weights for pre-trained model."""
-        self.model.load_weights("./%s" % PreTrainedModel.MODEL_FILENAME)
+        dir_of_current_file = os.path.dirname(os.path.abspath(__file__))
+        weights_path = os.path.join(dir_of_current_file, PreTrainedModel.MODEL_FILENAME)
+        self.model.load_weights(weights_path)
